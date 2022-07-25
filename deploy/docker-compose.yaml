@@ -1,0 +1,31 @@
+version: '3'
+services:
+  php:
+    image: ventustium/simple-containered-web-php:0.0.1
+    ports:
+      - "8888:80"
+    depends_on:
+      - database
+ 
+  database:
+    image: ventustium/simple-containered-web-mysql
+    restart: on-failure
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: change_me
+      MYSQL_USER: tutorials_user
+      MYSQL_PASSWORD: change_me
+    volumes:
+      - database:/var/lib/mysql
+ 
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - database
+ 
+volumes:
+  database:
